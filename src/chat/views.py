@@ -4,7 +4,11 @@ import json
 from django.contrib.auth.decorators import login_required
 
 def index(request):
-    return render(request, 'chat/index.html', {})
+
+    context = {
+        'friends': request.user.profile.get_friends()
+    }
+    return render(request, 'chat/index.html', context)
 
 
 @login_required

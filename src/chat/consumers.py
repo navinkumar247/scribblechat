@@ -3,6 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 from .models import Message
+from profiles.models import Relationship
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -35,7 +36,9 @@ class ChatConsumer(WebsocketConsumer):
         self.commands[text_data_json['command']](self,text_data_json)
     
     def fetch_messages(self, data):
-        messages = Message.last_10_messages()
+        room_name = data['room_name']
+        relation = Relationship.objects.get(slug = room_name)
+        messages = Message.last_30_messages(relation)
         content = {
             'command':'messages',
             'messages': self.messages_to_json(messages),
@@ -46,7 +49,7 @@ class ChatConsumer(WebsocketConsumer):
         result = []
         for message in messages:
             result.append(self.message_to_json(message))
-        return result
+        return result[::-1]
 
     def message_to_json(self, message):
         return {
@@ -57,8 +60,10 @@ class ChatConsumer(WebsocketConsumer):
 
     def new_message(self, data):
         author = data['from']
+        room_name = data['room_name']
+        relation = Relationship.objects.get(slug = room_name)
         author_user = User.objects.filter(username=author)[0]
-        message = Message.objects.create(author=author_user, content= data['message'])
+        message = Message.objects.create(author=author_user, content= data['message'], relation = relation )
         content = {
             'command':'new_message',
             'message': self.message_to_json(message)

@@ -16,29 +16,33 @@ def register(request):
             profile_form = ProfileForm(data=request.POST)
 
             if user_form.is_valid() and profile_form.is_valid():
-                user = user_form.save()
-                user.set_password(user.password)
-                messages.success(request, "Registration Succesful")
-                user.save()
+                
+                user = user_form.save() #Password is hashed by default. Need not do a set_password again
 
                 profile = profile_form.save(commit=False)
                 profile.user = user
                 if 'image' in request.FILES:
                     profile.image = request.FILES['image']
                 profile.save()
+                messages.success(request, "Registration Succesful")
+
             elif not (user_form.is_valid() and profile_form.is_valid()):
                 messages.error(request, "Invalid details / Either username or email id already registered")
+            user_form = UserForm()
+            profile_form = ProfileForm()
+
         elif 'login' in request.POST:
             username = request.POST.get('username')
             password = request.POST.get('password')
-
             user = authenticate(username=username, password=password)
-
-            if user and user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('chat:index'))
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('chat:index'))
+                else:
+                    messages.error(request, 'User not active')    
             else:
-                messages.error(request, 'Invalid credentials / User not active')
+                messages.error(request, 'Invalid credentials')
 
     user_form = UserForm()
     profile_form = ProfileForm()
