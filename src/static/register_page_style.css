@@ -80,11 +80,14 @@ p {
 }
 
 .container {
-  left: 50%;
+  left: 40%;
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* ---------- LOGIN ---------- */
+
 
 /* ---------- LOGIN ---------- */
 
@@ -164,4 +167,20 @@ fieldset{
 .middle {
   display: flex;
   width: 600px;
+}
+.prof-pic{
+  display: flex;
+
+}
+.bio{
+  font-size: 1.8em;
+}
+.image {
+	background-color: #fff;
+	border-radius: 0px 3px 3px 0px;
+	color: #000;
+	margin-bottom: 1em;
+	padding: 0 5px;
+  width: 200px;
+  align-items: center;
 }

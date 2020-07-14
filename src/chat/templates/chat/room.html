@@ -1,6 +1,16 @@
 {% extends 'chat/base.html' %}
 {% load static %}
 
+{% block contact %}
+    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+    <p>{{message_receiver}}</p>
+    <div class="social-media">
+        <i class="fa fa-facebook" aria-hidden="true"></i>
+        <i class="fa fa-twitter" aria-hidden="true"></i>
+        <i class="fa fa-instagram" aria-hidden="true"></i>
+    </div>
+{% endblock contact %}
+
 {% block messages %}
 
 	<div class="wrap">

@@ -36,7 +36,7 @@ min-width: 280px;
 max-width: 340px;
 width: 40%;
 height: 100%;
-background: #2c3e50;
+background: #1c2b5a;
 color: #f5f5f5;
 overflow: hidden;
 position: relative;
@@ -201,7 +201,7 @@ cursor: pointer;
 }
 }
 #frame #sidepanel #profile .wrap #status-options ul li:hover {
-background: #496886;
+background: #111e46;
 }
 #frame #sidepanel #profile .wrap #status-options ul li span.status-circle {
 position: absolute;
@@ -307,7 +307,7 @@ font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
 padding: 10px 0 10px 46px;
 width: calc(100% - 25px);
 border: none;
-background: #32465a;
+background: #0f1a3a;
 color: #f5f5f5;
 }
 #frame #sidepanel #search input:focus {
@@ -346,7 +346,7 @@ height: calc(100% - 334px);
 }
 #frame #sidepanel #contacts::-webkit-scrollbar {
 width: 8px;
-background: #2c3e50;
+background: #0f1a3a;
 }
 #frame #sidepanel #contacts::-webkit-scrollbar-thumb {
 background-color: #243140;

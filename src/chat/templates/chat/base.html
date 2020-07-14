@@ -63,26 +63,35 @@
 		</div>
 		<div id="contacts">
 			<ul>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status online"></span>
-						<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-						<div class="meta">
-							<p class="name">Louis Litt</p>
-							<p class="preview">You just got LITT up, Mike.</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact active">
-					<div class="wrap">
-						<span class="contact-status busy"></span>
-						<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-						<div class="meta">
-							<p class="name">Harvey Specter</p>
-							<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-						</div>
-					</div>
-				</li>
+				{% for friend in friends %}
+					{% if friend.sender != user.profile %}
+						<li class="contact">
+							<div class="wrap">
+								<span class="contact-status online"></span>
+								<img src="{{user.profile.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.sender}}" value = "{{friend.slug}}">
+									<input id="room-name-input" type="button" value = "{{friend.sender}}"/><br/>
+									<p class="preview">You just got LITT up, Mike.</p>
+								</div>
+							</div>
+						</li>
+						
+					{% else %}
+						<li class="contact">
+							<div class="wrap">
+								<span class="contact-status online"></span>
+								<img src="{{user.profile.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.receiver}}" value = "{{friend.slug}}" >
+									<input id="room-name-input" type="button" value = "{{friend.receiver}}"/><br/>
+									<p class="preview">You just got LITT up, Mike.</p>
+								</div>
+							</div>
+						</li>
+						
+					{% endif %}
+				{% endfor %}
 			</ul>
 		</div>
 		<div id="bottom-bar">
@@ -92,13 +101,8 @@
 	</div>
 	<div class="content" >
 		<div class="contact-profile">
-			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-			<p>{{user.username}}</p>
-			<div class="social-media">
-				<i class="fa fa-facebook" aria-hidden="true"></i>
-				<i class="fa fa-twitter" aria-hidden="true"></i>
-				 <i class="fa fa-instagram" aria-hidden="true"></i>
-			</div>
+			{% block contact %}
+			{% endblock  %}
 		</div>
 		<div class="messages">
 			<ul id="chat-log">

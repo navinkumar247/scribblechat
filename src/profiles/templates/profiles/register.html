@@ -1,30 +1,107 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register/Login</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- Include the above in your HEAD tag -->
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'register_page_style.css' %}">
 </head>
 <body>
-    <h3> Register Here</h3>
-    <form action="" method='POST' enctype='multipart/form-data'>
-        {% csrf_token %}
-        {{user_form.as_p}}
-        {{profile_form.as_p}}
-        <input type = 'submit' name = 'registration' value='Register'>
-    </form>
-    {% if messages %}
-        {% for message in messages %}
-            {{message}}
-        {% endfor %}
-    {% endif %}
-    <form action="" method='POST' >
-        {% csrf_token %}
-        <label for="username">Username</label>
-        <input type="text" name='username' >
-        <label for="password">Password</label>
-        <input type="password" name='password'>
-        <input type="submit" name='login' value='Login'>
-    </form>
+<div class="main">
+    
+    
+    <div class="container">
+        <center>
+            <div class="middle">
+                <div id="login">
+
+                    <form action="" method="post">
+
+                        <fieldset class="clearfix">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {{message}}
+                                {% endfor %}
+                            {% else %}
+                                {% csrf_token %}
+                                {% for item in user_form %}
+                                    {% if 'Username' in item.field.widget.attrs.Placeholder %}
+                                        <p><span class="fa fa-user"></span>{{item}}</p>
+                                    {% elif 'Password' in item.field.widget.attrs.Placeholder %}
+                                        <p><span class="fa fa-lock"></span>{{item}}</p>
+                                    {% endif %}
+                                    
+                                {% endfor %}
+                                {% for item in profile_form %}
+                                    {% if 'Email' in item.field.widget.attrs.Placeholder %}
+                                        <p><span class="fa fa-envelope"></span>{{item}}</p>
+                                    {% elif 'Profile Picture' in item.field.widget.attrs.Placeholder %}
+                                        <p class='prof-pic'><span class="fa fa-image"></span>{{item}}</p>
+                                    {% elif 'about yourself' in item.field.widget.attrs.Placeholder %}
+                                        <p class='bio'><span class=""></span>{{item}}</p>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <div>
+                                    <span style="width:50%; text-align:right;  display: inline-block;"><input type="submit" name='registration' value="Sign Up"></span>
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                        <div class="clearfix"></div>
+                    </form>
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end Signup -->
+                <div id="login">
+
+                    <form action="" method="post">
+
+                        <fieldset class="clearfix">
+                            {% csrf_token %}
+                            <p ><span class="fa fa-user"></span><input type="text"  name='username' Placeholder="Username" ></p> <!-- JS because of IE support; better: placeholder="Username" -->
+                            <p><span class="fa fa-lock"></span><input type="password"  name='password' Placeholder="Password"></p> <!-- JS because of IE support; better: placeholder="Password" -->
+                            
+                            <div>
+                                <span style="width:48%; text-align:left;  display: inline-block;"><a class="small-text" href="#">Forgot
+                                password?</a></span>
+                                <span style="width:50%; text-align:right;  display: inline-block;"><input type="submit" name='login' value="Let Me In"></span>
+                            </div>
+
+                        </fieldset>
+                        <div class="clearfix"></div>
+                    </form>
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end login -->
+                <div class="logo">LOGO
+                    
+                    <div class="clearfix"></div>
+                </div>
+                
+            </div>
+        </center>
+        </div>
+
+    </div>
+
+
 </body>
 </html>
+
+
+
