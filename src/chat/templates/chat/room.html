@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block contact %}
-    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+    <img src="{{message_receiver.image.url}}" alt="" />
     <p>{{message_receiver}}</p>
     <div class="social-media">
         <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -23,6 +23,15 @@
 
 {% block scripts %}
 <script>
+    // SCRIPT for contact buttons
+    const friendBtn = document.querySelectorAll('#room-name-input');
+        friendBtn.forEach((item) => {item.addEventListener('click' ,function(e) {
+            var roomName = document.querySelector('#'+item.value).value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        })})
+
+
+    // SCRIPT for messages
     var roomName = {{ room_name_json }};
     var username = {{ username }};
 
@@ -60,7 +69,7 @@
         var imgTag = document.createElement('img');
         var pTag = document.createElement('p');
         pTag.textContent = data.content;
-        imgTag.src = 'http://emilcarlsson.se/assets/louislitt.png';
+        imgTag.src = "{{author.profile.image.url}}";
 
         if (author === username){
             msgListTag.className = 'sent';
@@ -77,8 +86,9 @@
     };
 
     document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
+    var inputMsg = document.querySelector('#chat-message-input');
+    inputMsg.onkeyup = function(e) {
+        if (e.keyCode === 13 && inputMsg.value != '') {  // enter, return
             document.querySelector('#chat-message-submit').click();
         }
     };
@@ -86,13 +96,14 @@
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#chat-message-input');
         var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
+        if (message != ''){
+            chatSocket.send(JSON.stringify({
             'message': message,
             'command': 'new_message',
             'from': username,
             'room_name': roomName,
         }));
-
+        }
         messageInputDom.value = '';
     };
 </script>

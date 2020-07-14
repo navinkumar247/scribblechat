@@ -1,13 +1,19 @@
 
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
-$("#profile-img").click(function() {
+$("#profile-img").click(statusMenu);
+
+function statusMenu() {
     $("#status-options").toggleClass("active");
-});
+    $("#profile").removeClass("expanded");
+    $("#contacts").removeClass("expanded");
+}
 
 $(".expand-button").click(function() {
-$("#profile").toggleClass("expanded");
+    $("#profile").toggleClass("expanded");
     $("#contacts").toggleClass("expanded");
+    $("#status-options").removeClass("active");
+    
 });
 
 $("#status-options ul li").click(function() {
@@ -53,4 +59,4 @@ $("#status-options ul li").click(function() {
 //     newMessage();
 //     return false;
 // }
-});
+// });

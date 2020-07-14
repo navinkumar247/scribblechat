@@ -7,13 +7,13 @@
 
 div.main{
     background: #0264d6; /* Old browsers */
-background: -moz-radial-gradient(center, ellipse cover,  #0264d6 1%, #1c2b5a 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#0264d6), color-stop(100%,#1c2b5a)); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* IE10+ */
-background: radial-gradient(ellipse at center,  #0264d6 1%,#1c2b5a 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+background: -moz-radial-gradient(center, ellipse cover,  #d484db 1%, #714674 100%); /* FF3.6+ */
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#d484db), color-stop(100%,#714674)); /* Chrome,Safari4+ */
+background: -webkit-radial-gradient(center, ellipse cover,  #d484db 1%,#714674 100%); /* Chrome10+,Safari5.1+ */
+background: -o-radial-gradient(center, ellipse cover,  #d484db 1%,#714674 100%); /* Opera 12+ */
+background: -ms-radial-gradient(center, ellipse cover,  #d484db 1%,#714674 100%); /* IE10+ */
+background: radial-gradient(ellipse at center,  #d484db 1%,#714674 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d484db', endColorstr='#714674',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 height:calc(100vh);
 width:100%;
 }
@@ -66,7 +66,6 @@ p {
 
 .clearfix {
   *zoom: 1;
-
   &:before,
   &:after {
     content: ' ';
@@ -80,7 +79,9 @@ p {
 }
 
 .container {
-  left: 40%;
+  left: 50%;
+  display: flex;
+  width: 1000px;
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -99,14 +100,30 @@ p {
     width:40%;
 }
 #login{
-border-right:1px solid #fff;
+  border-right:1px solid #fff;
   padding: 0px 22px;
   width: 59%;
+  height: 600px;
+}
+#login h1{
+  margin: 0;
+  padding-bottom: 5px;
+  color: #fff ;
+}
+.form-block{
+  height: fit-content;
+  margin-top: 100px;
 }
 .logo{
-color:#fff;
-font-size:50px;
+  width: 100%;
+  color:#fff;
+  font-family: 'Cabin Sketch', cursive;
+  /* font-family: 'Special Elite', cursive; */
+  font-size:80px;
   line-height: 125px;
+  text-align: center;
+  align-items: center;
+  display: flex;
 }
 
 #login form span.fa {
@@ -166,7 +183,9 @@ fieldset{
 }
 .middle {
   display: flex;
-  width: 600px;
+  align-items: center;
+  width: 1000px;
+
 }
 .prof-pic{
   display: flex;
