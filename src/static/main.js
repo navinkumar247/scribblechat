@@ -39,24 +39,40 @@ $("#status-options ul li").click(function() {
     $("#status-options").removeClass("active");
 });
 
-// function newMessage() {
-//     message = $(".message-input input").val();
-//     if($.trim(message) == '') {
-//         return false;
-//     }
-//     $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-//     $('.message-input input').val(null);
-//     $('.contact.active .preview').html('<span>You: </span>' + message);
-//     $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-// };
+const addContact = $('#addcontact');
+const addContactsContainer = $('.addcontacts');
+addContact.click(function (){
+    addContactsContainer.toggleClass('addcontacts-active');
+    pendingRequestsContainer.removeClass('addcontacts-active');
+})
 
-// $('.submit').click(function() {
-// newMessage();
-// });
+const pendingRequests = $('#pending-requests');
+const pendingRequestsContainer = $('.pendingrequests');
+pendingRequests.click(function (){
+    pendingRequestsContainer.toggleClass('addcontacts-active');
+    addContactsContainer.removeClass('addcontacts-active');
+})
 
-// $(window).on('keydown', function(e) {
-// if (e.which == 13) {
-//     newMessage();
-//     return false;
-// }
-// });
+
+// const addContactForm = $('#addcontact-form');
+
+// addContactForm.submit(function (e) {
+//     e.preventDefault();
+//     const url = window.location.pathname;
+//     console.log(url);
+//     $.ajax({
+//         type: "GET",
+//         url: '',
+//         data: {
+//             "username_contains":$('#username_contains').val(),
+//             'search_new_contacts':'submit',
+
+//         },
+//         success: function(response){
+//             let data = JSON.parse(response.contacts);
+//             for (const iterator of data) {
+//                 console.log(iterator.fields.image);
+//             }
+//         }
+//     })
+// })

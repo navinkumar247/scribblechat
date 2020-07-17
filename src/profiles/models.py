@@ -22,6 +22,17 @@ class Profile(models.Model):
         friends_sender = self.sender.filter(status = 'accepted')
         friends = friends_receiver.union(friends_sender)
         return friends
+    
+    def get_pending_requests(self):
+        received_requests = self.receiver.filter(status = 'sent')
+        sent_requests = self.sender.filter(status = 'sent')
+        return (received_requests, sent_requests)
+
+    def get_searched_friends(self, username_contains):
+        friends_receiver = self.receiver.filter(status = 'accepted', sender__user__username__icontains=username_contains)
+        friends_sender = self.sender.filter(status = 'accepted', receiver__user__username__icontains=username_contains)
+        friends = friends_receiver.union(friends_sender)
+        return friends
 
     def get_received_friends_request(self):
         return self.user.receiver.filter(status = 'sent')
@@ -48,15 +59,13 @@ class Relationship(models.Model):
 
     def save(self, *args, **kwargs):
         slug_exist = False
-        if self.sender and self.receiver:
+        if self.status == 'accepted':          
             to_slug = slugify(str(self.sender.user.username)+str(self.receiver.user.username))
             slug_exist = Relationship.objects.filter(slug=to_slug).exists()
             while slug_exist:
                 to_slug = str(to_slug+ str(get_unique_code()))
                 slug_exist = Relationship.objects.filter(slug=to_slug).exists()
-        else:
-            to_slug = None
-        self.slug = to_slug
+            self.slug = to_slug
 
         super().save(*args, **kwargs)
 

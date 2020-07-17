@@ -60,15 +60,20 @@
 					<label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
 					<input name="twitter" type="text" value="mike.ross" />
 					<label for="update profile"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i></label>
-					<input name="update profile" type="text" value="Update Profile" />
+					<button name="update profile" class="btn btn-primary" data-toggle="modal" 
+					data-target="#updateModal"/>Edit Profile </button><br>
 					<label for="logout"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></label>
-					<input name="logout" type="text" value="Logout" />
+					<a name="logout" class="btn btn-primary" href="{% url 'profiles:logout' %}"/> Logout </a>
 				</div>
+				
 			</div>
 		</div>
 		<div id="search">
-			<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-			<input type="text" placeholder="Search contacts..." />
+			<form action="" method='GET'>
+				<label for=""><button type="submit" name='search_my_contacts'>
+				<i class="fa fa-search" aria-hidden="true"></i></button></label>
+				<input type="text" name="username_contains" placeholder="Search your contacts..." />
+			</form>
 		</div>
 		<div id="contacts">
 			<ul>
@@ -105,14 +110,79 @@
 		</div>
 		<div id="bottom-bar">
 			<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-			<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+			<button id="pending-requests"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Pending Requests</span></button>
 		</div>
-	</div>
+	</div>	
+		{% comment %} ADD CONTACTS {% endcomment %}
+	{% if contacts %}
+		<div class="addcontacts addcontacts-active">
+	{% else %}
+		<div class="addcontacts">
+	{% endif %}	
+			<h4>Add new contact</h4>
+			<div class="contactsearch">
+				<form action="" method='GET' id="addcontact-form">
+					<input type="text" id="username_contains" name="username_contains" placeholder="Search by username..." />
+					<label for="username_contains"><button type="submit" name='search_new_contacts'>
+					<i class="fa fa-search" aria-hidden="true"></i></button></label>
+				</form>
+			</div>
+			<ul class="container">
+				{% for contact in contacts %}
+					<li class="block">
+						<img src="{{contact.image.url}}" alt="" />
+						<div class="meta">
+							<h4>{{contact}}</h4>
+							<p>{{contact.email}}</p>
+							<p>{{contact.bio}}</p>
+							<a class="btn btn-primary mybtn" href="{% url 'chat:friendrequest' username=contact.user.username %}">Request</a>
+						</div>
+					</li>
+				{% endfor %}
+				
+			</ul>
+		</div>
+		<div class="pendingrequests">
+			<h4>Pending Requests</h4>
+			<h6>Received Requests</h6>
+			<ul class="container">
+				{% for contact in received_requests %}
+					<li class="block">
+						<img src="{{contact.sender.image.url}}" alt="" />
+						<div class="meta">
+							<h4>{{contact.sender}}</h4>
+							<p>{{contact.sender.email}}</p>
+							<p>{{contact.sender.bio}}</p>
+							<a class="" href="{% url 'chat:friendrequest' username=contact.sender.user.username %}" 
+							name="reject" >Reject</a>
+							<a class="btn btn-primary mybtn" 
+							href="{% url 'chat:acceptrequest' username=contact.sender.user.username %}" >Accept</a>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+			<h6>Sent Requests</h6>
+			<ul class="container">
+				{% for contact in sent_requests %}
+					<li class="block">
+						<img src="{{contact.receiver.image.url}}" alt="" />
+						<div class="meta">
+							<h4>{{contact.receiver}}</h4>
+							<p>{{contact.receiver.email}}</p>
+							<p>{{contact.receiver.bio}}</p>
+							<a class="btn btn-danger mybtn" href="{% url 'chat:friendrequest' username=contact.receiver.user.username %}">Cancel</a>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	
 	<div class="content" >
 		<div class="contact-profile">
 			{% block contact %}
 			{% endblock  %}
 		</div>
+
 		<div class="messages">
 			<ul id="chat-log">
 				<div class="logo">
@@ -129,7 +199,31 @@
 		</div>
 	</div>
 </div>
-
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable myModal">
+	<div class="modal-content ">
+	<div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<form action="" method="post" enctype="multipart/form-data">
+		<div class="modal-body">
+			
+			{% csrf_token %}
+			{{update_form.as_p}}
+			
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			<button type="submit" name="edit_profile" class="btn btn-primary">Save changes</button>
+		</div>
+	</form>
+	</div>
+</div>
+</div>
 
 
 

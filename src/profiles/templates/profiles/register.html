@@ -29,12 +29,12 @@
             <div class="middle">
                 <div id="login">
                     <h1>Register</h1>
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
 
                         <fieldset class="clearfix">
                             {% if messages %}
                                 {% for message in messages %}
-                                    {{message}}
+                                    <h2>{{message}}</h2>
                                 {% endfor %}
                             {% else %}
                                 {% csrf_token %}

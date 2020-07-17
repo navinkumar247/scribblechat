@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.views.generic import TemplateView
 
 # Create your views here.
 
@@ -13,7 +14,7 @@ def register(request):
         
         if 'registration' in request.POST:
             user_form = UserForm(data=request.POST)
-            profile_form = ProfileForm(data=request.POST)
+            profile_form = ProfileForm(data=request.POST, files=request.FILES)
 
             if user_form.is_valid() and profile_form.is_valid():
                 
@@ -53,3 +54,6 @@ def register(request):
     }
 
     return render(request, 'profiles/register.html', context)
+
+class ThankYouPage(TemplateView):
+    template_name = "profiles/thankyou.html"

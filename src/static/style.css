@@ -5,7 +5,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: #27ae60;
+    background: rgb(104, 104, 104);
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     font-size: 1.7em;
     letter-spacing: 0.1px;
@@ -13,6 +13,7 @@ body {
     text-rendering: optimizeLegibility;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
     -webkit-font-smoothing: antialiased;
+    overflow: hidden;
 }
 
 #frame {
@@ -23,6 +24,7 @@ height: 100vh;
 min-height: 300px;
 /* max-height: 720px; */
 background: #E6EAEA;
+overflow: hidden;
 }
 @media screen and (max-width: 360px) {
 #frame {
@@ -315,6 +317,11 @@ border: none;
 background: #a262a7;
 color: #f5f5f5;
 }
+#frame #sidepanel #search button{
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: #f5f5f5;
+}
 #frame #sidepanel #search input:focus {
 outline: none;
 background: #d581db;
@@ -514,6 +521,7 @@ font-size: 1em;
 float: right;
 width: 60%;
 height: 100%;
+background-color: rgb(80, 80, 80);
 overflow: hidden;
 position: relative;
 }
@@ -560,7 +568,7 @@ margin-right: 20px;
 color: #763d7a;
 }
 #frame .content .messages {
-height: 100vh;
+height: 100%;
 width: 100%;
 background-color: rgb(54, 54, 54);
 position: absolute;
@@ -695,4 +703,108 @@ outline: none;
     position: fixed;
     top: 50%;
     left: 50%;
+}
+
+
+/* UPDATE MODAL */
+
+.myModal{
+    
+    position: fixed;
+    left: 35%;
+    width: 100%;
+
+}
+.modal-content{
+    background-color: rgb(68, 68, 68);
+    color: #f5f5f5;
+}
+
+/* ADD CONTACTS */
+
+.addcontacts,.pendingrequests{
+    z-index: 3;
+    background-color: rgba(68, 68, 68, 0.8);
+    width: 700px;
+    height: 500px;
+    position: absolute;
+    left: 50px;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: rgb(179, 179, 179);
+    transform: translateY(100px);
+    transition: transform 0.2s ease-out;
+    opacity: 0;
+    pointer-events: none;
+}
+.addcontacts-active{
+    transform: translateY(0px);
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+.addcontacts button{
+    border: none;
+    background-color: #c073c5;
+    color: rgb(216, 216, 216);;
+}
+.addcontacts input{
+    border: none;
+    box-shadow: 0 0 2px 2px;
+}
+.addcontacts .container, .pendingrequests .container{
+    width: 100%;
+    height: 80%;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    
+    align-content: flex-start;
+    overflow-y: scroll;
+}
+
+.addcontacts .container .block, .pendingrequests .container .block{
+    background-color: rgb(177, 103, 103);
+    width: 42%;
+    height: 150px;
+    margin: 2%;
+    display: flex;
+    justify-content: space-between;
+    color: ivory;
+    position: relative;
+    
+}
+.block img{
+    height: 60%;
+    margin: auto;
+}
+.addcontacts .container::-webkit-scrollbar, .pendingrequests .container::-webkit-scrollbar {
+    width: 8px;
+    background: #401a42;
+    }
+.addcontacts .container::-webkit-scrollbar-thumb, .pendingrequests .container::-webkit-scrollbar-thumb{
+    background-color: #243140;
+}
+.block .meta{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.block .meta h4{
+    color: rgb(26, 26, 87);
+    font-weight: bold;
+}
+.block .meta p{
+    font-size: 0.8em;
+}
+.block .meta .mybtn{
+    width: fit-content;
+    font-size: 0.8em;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }

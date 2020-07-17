@@ -18,3 +18,10 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile 
         fields = ("email",'image','bio')
+
+class ProfileUpdateForm(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        fields = ("email","image","bio")
+
