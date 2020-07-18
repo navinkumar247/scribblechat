@@ -60,10 +60,10 @@
 					<label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
 					<input name="twitter" type="text" value="mike.ross" />
 					<label for="update profile"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i></label>
-					<button name="update profile" class="btn btn-primary" data-toggle="modal" 
+					<button name="update profile" class = "mybtn" data-toggle="modal" 
 					data-target="#updateModal"/>Edit Profile </button><br>
 					<label for="logout"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></label>
-					<a name="logout" class="btn btn-primary" href="{% url 'profiles:logout' %}"/> Logout </a>
+					<a name="logout" class="mybtn" href="{% url 'profiles:logout' %}"/> Logout </a>
 				</div>
 				
 			</div>
@@ -77,20 +77,20 @@
 		</div>
 		<div id="contacts">
 			<ul>
-				{% for friend in friends %}
+				<!--LIST OUT ONLINE FRIENDS-->
+				{% for friend in online_friends %}
 					{% if friend.sender != user.profile %}
 						<li class="contact">
 							<button class="wrap" id="room-name-input" value = "{{friend.sender}}">
-								{% comment %} <span class="contact-status online"></span> {% endcomment %}
+								<span class="contact-status online"></span>
 								<img src="{{friend.sender.image.url}}" alt="" />
 								<div class="meta">
 									<input type="hidden" id = "{{friend.sender}}" value = "{{friend.slug}}">
 									{{friend.sender}}
-									<p class="preview">You just got LITT up, Mike.</p>
+									<p class="preview">Online</p>
 								</div>
 							</button>
-						</li>
-						
+						</li>				
 					{% else %}
 						<li class="contact">
 							<button class="wrap" id="room-name-input" value = "{{friend.receiver}}">
@@ -99,7 +99,35 @@
 								<div class="meta">
 									<input type="hidden" id = "{{friend.receiver}}" value = "{{friend.slug}}" >
 									{{friend.receiver}}
-									<p class="preview">You just got LITT up, Mike.</p>
+									<p class="preview">Online</p>
+								</div>
+							</button>
+						</li>
+						
+					{% endif %}
+				{% endfor %}
+				<!--LIST OUT OFFLINE FRIENDS-->
+				{% for friend in offline_friends %}
+					{% if friend.sender != user.profile %}
+						<li class="contact">
+							<button class="wrap" id="room-name-input" value = "{{friend.sender}}">
+								{% comment %} <span class="contact-status online"></span> {% endcomment %}
+								<img src="{{friend.sender.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.sender}}" value = "{{friend.slug}}">
+									{{friend.sender}}
+									<p class="preview">Offline</p>
+								</div>
+							</button>
+						</li>				
+					{% else %}
+						<li class="contact">
+							<button class="wrap" id="room-name-input" value = "{{friend.receiver}}">
+								<img src="{{friend.receiver.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.receiver}}" value = "{{friend.slug}}" >
+									{{friend.receiver}}
+									<p class="preview">Offline</p>
 								</div>
 							</button>
 						</li>

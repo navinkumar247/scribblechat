@@ -10,7 +10,9 @@ from django.core import serializers
 from django.views.generic import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth.models import User
 
 @login_required(login_url='profiles:register')
 def index(request):
@@ -28,19 +30,26 @@ def index(request):
     update_form = ProfileUpdateForm(instance=user_profile)
 
     # GET CONTACT SEARCH DATA
-    friends, searched_contacts = get_contacts(request) 
+    friends, searched_contacts, all_relations = get_contacts(request) 
+    online_relations, offline_relations = get_online_users(request, friends)
+    
     received_requests, sent_requests = request.user.profile.get_pending_requests()
 
     context = {
-        'friends': friends,
+        'friends': all_relations,
+        'online_friends': online_relations,
+        'offline_friends': offline_relations,
         'update_form':update_form,
         'contacts': searched_contacts,
         'received_requests':received_requests,
         'sent_requests':sent_requests,
     }
     return render(request, 'chat/index.html', context)
+
 def get_contacts(request):
-    friends = request.user.profile.get_friends() # Get all relationship objects
+    all_relations = request.user.profile.get_friends() # Get all relationship objects
+    friends = get_friends_profiles_from_relations(request, all_relations)
+
     searched_contacts = []
     if request.method == 'GET':
         if 'search_my_contacts' in request.GET:
@@ -53,7 +62,42 @@ def get_contacts(request):
                 searched_contacts = Profile.objects.filter(user__username__icontains = username_contains)
                 # contacts = serializers.serialize('json', searched_contacts)
                 # return JsonResponse({"contacts":contacts}, safe=False)
-    return friends, searched_contacts
+    return friends, searched_contacts, all_relations
+
+def get_friends_profiles_from_relations(request, all_relations):
+    friends = []
+    for item in all_relations:
+        if item.sender != request.user.profile:
+            friends.append(item.sender)
+        elif item.receiver != request.user.profile:
+            friends.append(item.receiver)
+    return friends
+
+def get_online_users(request, friends):
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+    
+    all_online_users = User.objects.filter(id__in = uid_list)
+    online_friends = all_online_users.filter(profile__in = friends)
+    offline_friends = []
+
+    for friend in friends:
+        if friend.user not in online_friends:
+            offline_friends.append(friend.user)
+    
+    online_friends_relation = Relationship.objects.filter(
+        Q(sender__user__in = online_friends, receiver = request.user.profile)|
+        Q(sender=request.user.profile, receiver__user__in = online_friends)
+        )
+    offline_friends_relation = Relationship.objects.filter(
+        Q(sender__user__in = offline_friends, receiver = request.user.profile)|
+        Q(sender=request.user.profile, receiver__user__in = offline_friends)
+        )
+    return online_friends_relation, offline_friends_relation
 
 @login_required(login_url='profiles:register')
 def room(request, room_name):
