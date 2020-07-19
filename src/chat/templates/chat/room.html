@@ -14,7 +14,8 @@
 {% block messages %}
 
 	<div class="wrap">
-		<input type="text" id="chat-message-input" placeholder="Write your message..." />
+		<input type="text" id="chat-message-input" placeholder="Write your message..." data-emojiable="true"
+        data-emoji-input="unicode"/>
 		<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
 		<button class="submit" id="chat-message-submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 	</div>
@@ -30,7 +31,7 @@
             window.location.pathname = '/chat/' + roomName + '/';
         })})
 
-
+    
     // SCRIPT for messages
     var roomName = {{ room_name_json }};
     var username = {{ username }};
@@ -79,6 +80,7 @@
         msgListTag.appendChild(imgTag);
         msgListTag.appendChild(pTag);
         document.querySelector('#chat-log').appendChild(msgListTag);
+        document.querySelector('.messages').scrollTo(0,document.querySelector('.messages').scrollHeight);
     };
 
     chatSocket.onclose = function(e) {
@@ -86,12 +88,7 @@
     };
 
     document.querySelector('#chat-message-input').focus();
-    var inputMsg = document.querySelector('#chat-message-input');
-    inputMsg.onkeyup = function(e) {
-        if (e.keyCode === 13 && inputMsg.value != '') {  // enter, return
-            document.querySelector('#chat-message-submit').click();
-        }
-    };
+    
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#chat-message-input');
@@ -107,7 +104,22 @@
         messageInputDom.value = '';
     };
 </script>
+<script>
+//SCRIPT for emoji
+
+window.emojiPicker = new EmojiPicker({
+    emojiable_selector: '[data-emojiable=true]',
+    assetsPath: '{% static 'img' %}',
+    popupButtonClasses: 'fa fa-smile-o'
+});
+// Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+// You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+// It can be called as many times as necessary; previously converted input fields will not be converted again
+window.emojiPicker.discover();
+
+
+
+</script>
 
 
 {% endblock scripts %}
-

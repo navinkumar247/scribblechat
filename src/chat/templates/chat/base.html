@@ -27,6 +27,7 @@
 	
 	<!------ Include the above in your HEAD tag ---------->
 	<link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" href="{% static 'emoji.css' %}">
 	<link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
 	<title>
         {% block title %}
@@ -61,7 +62,7 @@
 					<input name="twitter" type="text" value="mike.ross" />
 					<label for="update profile"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i></label>
 					<button name="update profile" class = "mybtn" data-toggle="modal" 
-					data-target="#updateModal"/>Edit Profile </button><br>
+					data-target="#updateModal"/>Edit Profile </button>
 					<label for="logout"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></label>
 					<a name="logout" class="mybtn" href="{% url 'profiles:logout' %}"/> Logout </a>
 				</div>
@@ -77,6 +78,32 @@
 		</div>
 		<div id="contacts">
 			<ul>
+				<!--LIST OUT SEARCHED FRIENDS-->
+				{% for friend in searched_contacts %}
+					{% if friend.sender != user.profile %}
+						<li class="contact">
+							<button class="wrap" id="room-name-input" value = "{{friend.sender}}">
+								<span class="contact-status online"></span>
+								<img src="{{friend.sender.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.sender}}" value = "{{friend.slug}}">
+									{{friend.sender}}
+								</div>
+							</button>
+						</li>				
+					{% else %}
+						<li class="contact">
+							<button class="wrap" id="room-name-input" value = "{{friend.receiver}}">
+								<span class="contact-status online"></span>
+								<img src="{{friend.receiver.image.url}}" alt="" />
+								<div class="meta">
+									<input type="hidden" id = "{{friend.receiver}}" value = "{{friend.slug}}" >
+									{{friend.receiver}}
+								</div>
+							</button>
+						</li>
+					{% endif %}
+				{% endfor %}
 				<!--LIST OUT ONLINE FRIENDS-->
 				{% for friend in online_friends %}
 					{% if friend.sender != user.profile %}
@@ -257,6 +284,10 @@
 
 <script src={% static 'main.js' %}></script>
 <script src={% static 'reconnecting-websocket.js' %}></script>
+<script src={% static 'jquery.emojiarea.js' %}></script>
+<script src={% static 'util.js' %}></script>
+<script src={% static 'config.js' %}></script>
+<script src={% static 'emoji-picker.js' %}></script>
 
 {% block scripts %}
 

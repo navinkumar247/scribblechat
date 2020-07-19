@@ -30,9 +30,13 @@ def index(request):
     update_form = ProfileUpdateForm(instance=user_profile)
 
     # GET CONTACT SEARCH DATA
-    friends, searched_contacts, all_relations = get_contacts(request) 
+    all_relations = request.user.profile.get_friends() # Get all relationship objects
+    searched_contacts, searched_my_contacts = get_contacts(request)
+    friends = get_friends_profiles_from_relations(request, all_relations)
     online_relations, offline_relations = get_online_users(request, friends)
-    
+    if searched_my_contacts:
+        online_relations = []
+        offline_relations = []
     received_requests, sent_requests = request.user.profile.get_pending_requests()
 
     context = {
@@ -41,28 +45,28 @@ def index(request):
         'offline_friends': offline_relations,
         'update_form':update_form,
         'contacts': searched_contacts,
+        'searched_contacts': searched_my_contacts,
         'received_requests':received_requests,
         'sent_requests':sent_requests,
     }
     return render(request, 'chat/index.html', context)
 
 def get_contacts(request):
-    all_relations = request.user.profile.get_friends() # Get all relationship objects
-    friends = get_friends_profiles_from_relations(request, all_relations)
-
+    
     searched_contacts = []
+    searched_my_contacts = []
     if request.method == 'GET':
         if 'search_my_contacts' in request.GET:
             username_contains = request.GET.get('username_contains')
             if username_contains != '' and username_contains is not None:
-                friends = request.user.profile.get_searched_friends(username_contains)
+                searched_my_contacts = request.user.profile.get_searched_friends(username_contains)
         elif 'search_new_contacts' in request.GET:
             username_contains = request.GET.get('username_contains')
             if username_contains != '' and username_contains is not None:
                 searched_contacts = Profile.objects.filter(user__username__icontains = username_contains)
                 # contacts = serializers.serialize('json', searched_contacts)
                 # return JsonResponse({"contacts":contacts}, safe=False)
-    return friends, searched_contacts, all_relations
+    return searched_contacts, searched_my_contacts
 
 def get_friends_profiles_from_relations(request, all_relations):
     friends = []
@@ -103,16 +107,25 @@ def get_online_users(request, friends):
 def room(request, room_name):
     
     message_receiver = get_message_receiver(request, room_name)
-    friends, searched_contacts = get_contacts(request) 
+    # GET CONTACT SEARCH DATA
+    all_relations = request.user.profile.get_friends() # Get all relationship objects
+    searched_contacts, searched_my_contacts = get_contacts(request)
+    friends = get_friends_profiles_from_relations(request, all_relations)
+    online_relations, offline_relations = get_online_users(request, friends)
+    if searched_my_contacts:
+        online_relations = []
+        offline_relations = []
     received_requests, sent_requests = request.user.profile.get_pending_requests()
 
     context = {
         'room_name_json': mark_safe(json.dumps(room_name)),
         'username': mark_safe(json.dumps(request.user.username)),
-        'friends': request.user.profile.get_friends(),
         'message_receiver': message_receiver,
         'friends': friends,
         'contacts': searched_contacts,
+        'searched_contacts': searched_my_contacts,
+        'online_friends': online_relations,
+        'offline_friends': offline_relations,
         'received_requests':received_requests,
         'sent_requests':sent_requests,
     }

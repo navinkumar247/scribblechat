@@ -54,6 +54,14 @@ pendingRequests.click(function (){
 })
 
 
+var inputMsg = document.querySelector('#chat-message-input');
+inputMsg.onkeyup = function(e) {
+    e.preventDefault();
+    console.log('works');
+    if (e.keyCode === 13 && inputMsg.value != '') {  // enter, return
+        document.querySelector('#chat-message-submit').click();
+    }
+};
 // const addContactForm = $('#addcontact-form');
 
 // addContactForm.submit(function (e) {
