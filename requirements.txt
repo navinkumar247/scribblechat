@@ -27,7 +27,7 @@ PyHamcrest==2.0.2
 pyOpenSSL==19.1.0
 pypiwin32==223
 pytz==2020.1
-pywin32==228
+pywin32==301
 redis==3.5.3
 requests==2.24.0
 service-identity==18.1.0
